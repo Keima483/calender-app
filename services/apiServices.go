@@ -66,6 +66,19 @@ func AddTasks(tasks []models.TaskModel, userId int) ([]repository.Task, error) {
 	return getTasks(userId), nil
 }
 
+func GetDayDetail(date string, userId int) ([]repository.Task, []repository.Holiday, error) {
+	var user repository.User
+	initializers.DB.First(&user, userId)
+	if user.Email == "" {
+		return []repository.Task{}, []repository.Holiday{} , errors.New("no user with such id")
+	}
+	var tasks []repository.Task
+	initializers.DB.Where("user_id = ? and date = ?", userId, date).Find(&tasks)
+	var holidays []repository.Holiday
+	initializers.DB.Where("date = ?", date).Find(&holidays)
+	return tasks, holidays, nil
+}
+
 func DeleteTask(taskId int) error {
 	var task repository.Task
 	initializers.DB.Find(&task, taskId)

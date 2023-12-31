@@ -56,6 +56,16 @@ func AddMultipleTasks(c *fiber.Ctx) error {
 	return c.JSON(tsks)
 }
 
+func GetDayDetail(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Locals("user_id").(string))
+	date := c.Query("date")
+	task, holidays, err := services.GetDayDetail(date, id)
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+	return c.JSON(fiber.Map{"tasks":task, "holidays": holidays})
+}
+
 func DeleteTask(c *fiber.Ctx) error {
 	taskId, _ := strconv.Atoi(c.Params("id"))
 	err := services.DeleteTask(taskId)

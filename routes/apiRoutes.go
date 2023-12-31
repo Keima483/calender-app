@@ -15,5 +15,6 @@ func APIRoutes(app *fiber.App) {
 	group.Get("/task", controllers.GetTasks)
 	group.Post("/task", controllers.AddTask)
 	group.Post("/tasks", controllers.AddMultipleTasks)
+	group.Get("/occasions", controllers.GetDayDetail)
 	group.Delete("/task/:id", controllers.DeleteTask)
 }
